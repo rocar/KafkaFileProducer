@@ -36,7 +36,7 @@ object MNEMSC {
 @AvroName("mnemsc")
 @AvroNamespace("com.neuralt")
 case class MNEMSC(@AvroName("entity") entity: String,
-                   @AvroName("starttime") startTime: Long,
+                   @AvroName("starttime") eventTime: Long,
                    @AvroName("destination") destination: String,
                    @AvroName("duration") duration: Int,
                    @AvroName("charge") charge: Float,

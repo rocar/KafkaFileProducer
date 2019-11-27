@@ -8,7 +8,6 @@ import com.neuralt.domain._
 import com.sksamuel.avro4s.AvroSchema
 import com.typesafe.config.ConfigFactory
 import io.confluent.kafka.serializers.{AbstractKafkaAvroSerDeConfig, KafkaAvroSerializer}
-import org.apache.avro.Schema
 import org.apache.avro.generic._
 import org.apache.kafka.clients.producer._
 import org.apache.kafka.common.serialization.StringSerializer
@@ -33,15 +32,10 @@ object FileProducer extends App {
   val applicationID = config.getString("applicationID")
   log.info("Config: " + config)
 
-  val schema = args(0) match {
-    case "MNE" => AvroSchema[MNE]
-    case "MNESMSC" => AvroSchema[MNESMSC]
-    case "MNEMSC" => AvroSchema[MNESMSC]
-    case _ => { log.info("Unknown type: " + args(0)); System.exit(0)}
-  }
+  val filetype = args(0)
 
   val filename = args(1)
-  val rate = if(Try(args(2).toInt).isSuccess) args(1).toInt else 0
+  val rate = if(Try(args(2).toInt).isSuccess) args(2).toInt else 0
 
   val props = new Properties()
   props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerAddress)
@@ -56,6 +50,14 @@ object FileProducer extends App {
   props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl)
 
   val producer = new KafkaProducer[String, GenericRecord](props)
+
+  val schema = filetype match {
+    case "MNE" => AvroSchema[MNE]
+    case "MNESMSC" => AvroSchema[MNESMSC]
+    case "MNEMSC" => AvroSchema[MNESMSC]
+    case _ => { log.info("Unknown type: " + args(0)); System.exit(0)}
+  }
+
   log.info("Process file: " + filename)
   log.info("At rate: " + rate)
   log.info("AvroSchema: " + schema)
@@ -75,7 +77,13 @@ object FileProducer extends App {
         elapsed = (System.currentTimeMillis() - t0).toInt
       }
 
-      MNE(line, '|') match {
+      val r = filetype match {
+        case "MNE" => MNE(line, '|')
+        case "MNESMSC" => MNESMSC(line, '|')
+        case "MNEMSC" => MNEMSC(line, '|')
+      }
+
+      r match {
         case Success(record) => {
           producer.send(new ProducerRecord[String, GenericRecord](topicName,
             null,
@@ -106,3 +114,4 @@ object FileProducer extends App {
     bufferedSource.close()
   }
 }
+
