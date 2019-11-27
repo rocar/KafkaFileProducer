@@ -1,11 +1,12 @@
-package com.neuralt.producer
+package com.neuralt.domain
 
-import java.time.{LocalDateTime, ZoneOffset}
 import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneOffset}
 
+import com.neuralt.producer.avroSeralizer
 import com.sksamuel.avro4s.{AvroName, AvroNamespace, AvroSchema}
-import org.apache.avro.generic.GenericData
 import org.apache.avro.Schema
+import org.apache.avro.generic.GenericData
 
 import scala.util.Try
 

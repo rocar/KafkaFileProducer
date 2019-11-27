@@ -4,6 +4,7 @@ import java.io.{FileNotFoundException, IOException, _}
 import java.util.zip._
 import java.util.{Properties, UUID}
 
+import com.neuralt.domain._
 import com.sksamuel.avro4s.AvroSchema
 import com.typesafe.config.ConfigFactory
 import io.confluent.kafka.serializers.{AbstractKafkaAvroSerDeConfig, KafkaAvroSerializer}
@@ -38,14 +39,14 @@ object FileProducer extends App {
   val props = new Properties()
   props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerAddress)
   props.put(ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString)
-  props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getCanonicalName);
-  props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getCanonicalName);
-  props.put(ProducerConfig.ACKS_CONFIG, "0");
-  props.put(ProducerConfig.RETRIES_CONFIG, "0");
-  props.put(ProducerConfig.BATCH_SIZE_CONFIG, "16384");
-  props.put(ProducerConfig.LINGER_MS_CONFIG, "1");
-  props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, "33554432");
-  props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
+  props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getCanonicalName)
+  props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getCanonicalName)
+  props.put(ProducerConfig.ACKS_CONFIG, "0")
+  props.put(ProducerConfig.RETRIES_CONFIG, "0")
+  props.put(ProducerConfig.BATCH_SIZE_CONFIG, "16384")
+  props.put(ProducerConfig.LINGER_MS_CONFIG, "1")
+  props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, "33554432")
+  props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl)
 
   val producer = new KafkaProducer[String, GenericRecord](props)
   val schema: Schema = AvroSchema[MNE]
@@ -62,10 +63,10 @@ object FileProducer extends App {
     for (line <- bufferedSource.getLines) {
       log.debug(line)
 
-      elapsed = ((System.currentTimeMillis() - t0)).toInt
+      elapsed = (System.currentTimeMillis() - t0).toInt
       while ((produced/elapsed)*1000 > rate && rate > 0) {
         Thread.sleep(100)
-        elapsed = ((System.currentTimeMillis() - t0)).toInt
+        elapsed = (System.currentTimeMillis() - t0).toInt
       }
 
       MNE(line, '|') match {

@@ -1,8 +1,9 @@
 package com.neuralt.domain
 
-import java.time.{LocalDateTime, ZoneOffset}
 import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneOffset}
 
+import com.neuralt.producer.avroSeralizer
 import com.sksamuel.avro4s.{AvroName, AvroNamespace, AvroSchema}
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericData
@@ -14,7 +15,7 @@ object MNESMSC {
     val cols = line.split(delim).map(_.trim)
     Try(
       new MNESMSC(cols(0),
-        LocalDateTime.parse(cols(1),DateTimeFormatter.ofPattern("yyyyMMddHHmmss")),
+        LocalDateTime.parse(cols(1),DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).toInstant(ZoneOffset.UTC).toEpochMilli,
         cols(2),
         cols(3).toInt,
         cols(4).toFloat,
@@ -28,8 +29,8 @@ object MNESMSC {
         cols(12),
         cols(13),
         cols(14),
-        LocalDateTime.parse(cols(15),DateTimeFormatter.ofPattern("yyyyMMddHHmmss")),
-        LocalDateTime.parse(cols(16),DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+        LocalDateTime.parse(cols(15),DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).toInstant(ZoneOffset.UTC).toEpochMilli,
+        LocalDateTime.parse(cols(16),DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).toInstant(ZoneOffset.UTC).toEpochMilli,
       )
     )
   }
@@ -37,7 +38,7 @@ object MNESMSC {
 @AvroName("mnesmsc")
 @AvroNamespace("com.neuralt")
 case class MNESMSC(@AvroName("entity") Entity: String,
-               @AvroName("starttime") StartTime: LocalDateTime,
+               @AvroName("starttime") StartTime: Long,
                @AvroName("destination") Destination: String,
                @AvroName("duration") Duration: Int,
                @AvroName("charge") Charge: Float,
@@ -51,8 +52,8 @@ case class MNESMSC(@AvroName("entity") Entity: String,
                @AvroName("susagetype") SUsageType: String,
                @AvroName("imsi") Imsi: String,
                @AvroName("smarketsegment") SMarketSegment: String,
-               @AvroName("stored") Stored: LocalDateTime,
-               @AvroName("adjustmenttimestamp") AdjustmentTimestamp: LocalDateTime
+               @AvroName("stored") Stored: Long,
+               @AvroName("adjustmenttimestamp") AdjustmentTimestamp: Long
               ) extends avroSeralizer {
 
 
@@ -60,7 +61,7 @@ case class MNESMSC(@AvroName("entity") Entity: String,
     val schema: Schema = AvroSchema[MNESMSC]
     val avroRecord = new GenericData.Record(schema)
     avroRecord.put("entity", Entity)
-    avroRecord.put("starttime", StartTime.toInstant(ZoneOffset.UTC).toEpochMilli)
+    avroRecord.put("starttime", StartTime)
     avroRecord.put("destination", Destination)
     avroRecord.put("duration", Duration)
     avroRecord.put("charge", Charge)
@@ -74,8 +75,8 @@ case class MNESMSC(@AvroName("entity") Entity: String,
     avroRecord.put("susagetype", SUsageType)
     avroRecord.put("imsi", Imsi)
     avroRecord.put("smarketsegment", SMarketSegment)
-    avroRecord.put("stored", Stored.toInstant(ZoneOffset.UTC).toEpochMilli)
-    avroRecord.put("adjustmenttimestamp", AdjustmentTimestamp.toInstant(ZoneOffset.UTC).toEpochMilli)
+    avroRecord.put("stored", Stored)
+    avroRecord.put("adjustmenttimestamp", AdjustmentTimestamp)
     avroRecord
   }
 }

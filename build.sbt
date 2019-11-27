@@ -1,8 +1,8 @@
 name := "KafkaFileProducer"
-
 version := "0.1"
 
 scalaVersion := "2.12.10"
+resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
 resolvers += "confluent.io" at "http://packages.confluent.io/maven/"
 
 val logback = "1.2.3"
