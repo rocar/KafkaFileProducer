@@ -20,8 +20,8 @@ import scala.util.{Failure, Success, Try}
 object FileProducer extends App {
   private val log = LoggerFactory.getLogger(FileProducer.getClass)
 
-  if (args.length < 1) {
-    println(s"Usage: <filename> <msg/s>")
+  if (args.length < 2) {
+    println(s"Usage: <MNE/MNESMSC/MNEMSC> <filename> <msg/s>")
     System.exit(0)
   }
 
@@ -33,8 +33,15 @@ object FileProducer extends App {
   val applicationID = config.getString("applicationID")
   log.info("Config: " + config)
 
-  val filename = args(0)
-  val rate = if(Try(args(1).toInt).isSuccess) args(1).toInt else 0
+  val schema = args(0) match {
+    case "MNE" => AvroSchema[MNE]
+    case "MNESMSC" => AvroSchema[MNESMSC]
+    case "MNEMSC" => AvroSchema[MNESMSC]
+    case _ => { log.info("Unknown type: " + args(0)); System.exit(0)}
+  }
+
+  val filename = args(1)
+  val rate = if(Try(args(2).toInt).isSuccess) args(1).toInt else 0
 
   val props = new Properties()
   props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerAddress)
@@ -49,7 +56,6 @@ object FileProducer extends App {
   props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl)
 
   val producer = new KafkaProducer[String, GenericRecord](props)
-  val schema: Schema = AvroSchema[MNE]
   log.info("Process file: " + filename)
   log.info("At rate: " + rate)
   log.info("AvroSchema: " + schema)
@@ -70,12 +76,12 @@ object FileProducer extends App {
       }
 
       MNE(line, '|') match {
-        case Success(mneRecord) => {
+        case Success(record) => {
           producer.send(new ProducerRecord[String, GenericRecord](topicName,
             null,
-            mneRecord.StartTime,
-            mneRecord.CustKey,
-            mneRecord.createAvro()))
+            record.eventTime,
+            record.entity,
+            record.createAvro()))
           produced += 1
           print(".")
         }

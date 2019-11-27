@@ -3,7 +3,6 @@ package com.neuralt.domain
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneOffset}
 
-import com.neuralt.producer.avroSeralizer
 import com.sksamuel.avro4s.{AvroName, AvroNamespace, AvroSchema}
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericData
@@ -45,62 +44,61 @@ object MNE {
 }
 @AvroName("mne")
 @AvroNamespace("com.neuralt")
-case class MNE(@AvroName("custkey") CustKey: String,
-               @AvroName("servedmsisdn") ServedMSISDN: String,
-               @AvroName("servedimsi") ServedIMSI: String,
-               @AvroName("tariffmodel") TariffModel: String,
-               @AvroName("starttime") StartTime: Long,
-               @AvroName("servicecode") ServiceCode: String,
-               @AvroName("eventclass") EventClass: String,
-               @AvroName("servingnodeplmn") ServingNodePLMN: String,
-               @AvroName("apn") APN: String,
-               @AvroName("duration") Duration: Int,
-               @AvroName("uplink") Uplink: Float,
-               @AvroName("downlink") Downlink: Float,
-               @AvroName("volume") Volume: Float,
-               @AvroName("cellid") CellID: Long,
-               @AvroName("loc") LOC: Long,
-               @AvroName("gci") GCI: String,
-               @AvroName("rattype") RATType: Long,
-               @AvroName("causeforrecclosing") CauseForRecClosing: Long,
-               @AvroName("chargingrulebasename") ChargingRuleBaseName: String,
-               @AvroName("ratinggroup") RatingGroup: Long,
-               @AvroName("chargingid") ChargingID: String,
-               @AvroName("resource") Resource: String,
-               @AvroName("priceplan") PricePlan: String,
-               @AvroName("chargedunits") ChargedUnits: Float,
-               @AvroName("roundedamount") RoundedAmount: Float
+case class MNE(@AvroName("custkey") entity: String,
+               @AvroName("servedmsisdn") servedMSISDN: String,
+               @AvroName("servedimsi") servedIMSI: String,
+               @AvroName("tariffmodel") tariffModel: String,
+               @AvroName("starttime") eventTime: Long,
+               @AvroName("servicecode") serviceCode: String,
+               @AvroName("eventclass") eventClass: String,
+               @AvroName("servingnodeplmn") servingNodePLMN: String,
+               @AvroName("apn") apn: String,
+               @AvroName("duration") duration: Int,
+               @AvroName("uplink") uplink: Float,
+               @AvroName("downlink") downlink: Float,
+               @AvroName("volume") volume: Float,
+               @AvroName("cellid") cellID: Long,
+               @AvroName("loc") loc: Long,
+               @AvroName("gci") gci: String,
+               @AvroName("rattype") ratType: Long,
+               @AvroName("causeforrecclosing") causeForRecClosing: Long,
+               @AvroName("chargingrulebasename") chargingRuleBaseName: String,
+               @AvroName("ratinggroup") ratingGroup: Long,
+               @AvroName("chargingid") chargingID: String,
+               @AvroName("resource") resource: String,
+               @AvroName("priceplan") pricePlan: String,
+               @AvroName("chargedunits") chargedUnits: Float,
+               @AvroName("roundedamount") roundedAmount: Float
               ) extends avroSeralizer {
-
 
   override def createAvro(): GenericData.Record = {
     val schema: Schema = AvroSchema[MNE]
     val avroRecord = new GenericData.Record(schema)
-    avroRecord.put("custkey", CustKey)
-    avroRecord.put("servedmsisdn", ServedMSISDN)
-    avroRecord.put("servedimsi", ServedIMSI)
-    avroRecord.put("tariffmodel", TariffModel)
-    avroRecord.put("starttime", StartTime)
-    avroRecord.put("servicecode", ServiceCode)
-    avroRecord.put("eventclass", EventClass)
-    avroRecord.put("servingnodeplmn", ServingNodePLMN)
-    avroRecord.put("apn", APN)
-    avroRecord.put("duration", Duration)
-    avroRecord.put("uplink", Uplink)
-    avroRecord.put("downlink", Downlink)
-    avroRecord.put("volume", Volume)
-    avroRecord.put("cellid", CellID)
-    avroRecord.put("loc", LOC)
-    avroRecord.put("gci", GCI)
-    avroRecord.put("rattype", RATType)
-    avroRecord.put("causeforrecclosing", CauseForRecClosing)
-    avroRecord.put("chargingrulebasename", ChargingRuleBaseName)
-    avroRecord.put("ratinggroup", RatingGroup)
-    avroRecord.put("chargingid", ChargingID)
-    avroRecord.put("resource", Resource)
-    avroRecord.put("priceplan", PricePlan)
-    avroRecord.put("chargedunits", ChargedUnits)
-    avroRecord.put("roundedamount", RoundedAmount)
+    avroRecord.put("custkey", entity)
+    avroRecord.put("servedmsisdn", servedMSISDN)
+    avroRecord.put("servedimsi", servedIMSI)
+    avroRecord.put("tariffmodel", tariffModel)
+    avroRecord.put("starttime", eventTime)
+    avroRecord.put("servicecode", serviceCode)
+    avroRecord.put("eventclass", eventClass)
+    avroRecord.put("servingnodeplmn", servingNodePLMN)
+    avroRecord.put("apn", apn)
+    avroRecord.put("duration", duration)
+    avroRecord.put("uplink", uplink)
+    avroRecord.put("downlink", downlink)
+    avroRecord.put("volume", volume)
+    avroRecord.put("cellid", cellID)
+    avroRecord.put("loc", loc)
+    avroRecord.put("gci", gci)
+    avroRecord.put("rattype", ratType)
+    avroRecord.put("causeforrecclosing", causeForRecClosing)
+    avroRecord.put("chargingrulebasename", chargingRuleBaseName)
+    avroRecord.put("ratinggroup", ratingGroup)
+    avroRecord.put("chargingid", chargingID)
+    avroRecord.put("resource", resource)
+    avroRecord.put("priceplan", pricePlan)
+    avroRecord.put("chargedunits", chargedUnits)
+    avroRecord.put("roundedamount", roundedAmount)
     avroRecord
   }
 }
