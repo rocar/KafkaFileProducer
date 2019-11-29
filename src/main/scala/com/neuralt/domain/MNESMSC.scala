@@ -29,7 +29,7 @@ object MNESMSC {
         cols(13),
         cols(14),
         LocalDateTime.parse(cols(15),DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).toInstant(ZoneOffset.UTC).toEpochMilli,
-        LocalDateTime.parse(cols(16),DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).toInstant(ZoneOffset.UTC).toEpochMilli,
+        LocalDateTime.parse(cols(16) match {case "null" => "19700101000000"; case v => v},DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).toInstant(ZoneOffset.UTC).toEpochMilli,
       )
     )
   }

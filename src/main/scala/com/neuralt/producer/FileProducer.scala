@@ -33,7 +33,6 @@ object FileProducer extends App {
   log.info("Config: " + config)
 
   val filetype = args(0)
-
   val filename = args(1)
   val rate = if(Try(args(2).toInt).isSuccess) args(2).toInt else 0
 
