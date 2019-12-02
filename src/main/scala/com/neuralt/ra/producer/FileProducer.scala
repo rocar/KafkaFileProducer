@@ -1,10 +1,10 @@
-package com.neuralt.producer
+package com.neuralt.ra.producer
 
 import java.io.{FileNotFoundException, IOException, _}
 import java.util.zip._
 import java.util.{Properties, UUID}
 
-import com.neuralt.domain._
+import com.neuralt.ra.domain._
 import com.sksamuel.avro4s.AvroSchema
 import com.typesafe.config.ConfigFactory
 import io.confluent.kafka.serializers.{AbstractKafkaAvroSerDeConfig, KafkaAvroSerializer}

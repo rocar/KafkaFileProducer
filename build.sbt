@@ -1,7 +1,8 @@
 name := "KafkaFileProducer"
-version := "0.1"
+version := "0.1-SNAPSHOT"
 
 scalaVersion := "2.12.10"
+organization := "com.neuralt.ra"
 resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
 resolvers += "confluent.io" at "http://packages.confluent.io/maven/"
 
@@ -20,3 +21,5 @@ libraryDependencies += "io.confluent" % "kafka-avro-serializer" % confluentVersi
 
 libraryDependencies += "com.typesafe" % "config" % "1.4.0"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % logback
+
+libraryDependencies += "com.neuralt" %% "radomain" % "0.1-SNAPSHOT"
