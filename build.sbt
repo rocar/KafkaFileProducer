@@ -21,5 +21,4 @@ libraryDependencies += "io.confluent" % "kafka-avro-serializer" % confluentVersi
 
 libraryDependencies += "com.typesafe" % "config" % "1.4.0"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % logback
-
-libraryDependencies += "com.neuralt.ra" %% "radomain" % "0.1-SNAPSHOT"
+libraryDependencies += "com.neuralt.ra" %% "radomain" % "0.2-SNAPSHOT"

@@ -39,6 +39,8 @@ object FileProducer extends App {
   val props = new Properties()
   props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerAddress)
   props.put(ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString)
+  //props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getCanonicalName)
+  //props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getCanonicalName)
   props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getCanonicalName)
   props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getCanonicalName)
   props.put(ProducerConfig.ACKS_CONFIG, "0")
@@ -53,7 +55,9 @@ object FileProducer extends App {
   val schema = filetype match {
     case "MNE" => AvroSchema[MNE]
     case "MNESMSC" => AvroSchema[MNESMSC]
-    case "MNEMSC" => AvroSchema[MNESMSC]
+    case "MNEMSC" => AvroSchema[MNEMSC]
+    case "MNEMED" => AvroSchema[MNEMED]
+    case "MNEBILL" => AvroSchema[MNEBILL]
     case _ => { log.info("Unknown type: " + args(0)); System.exit(0)}
   }
 
@@ -80,6 +84,8 @@ object FileProducer extends App {
         case "MNE" => MNE(line, '|')
         case "MNESMSC" => MNESMSC(line, '|')
         case "MNEMSC" => MNEMSC(line, '|')
+        case "MNEBILL" => MNEMSC(line, '|')
+        case "MNEMED" => MNEMSC(line, '|')
       }
 
       r match {
